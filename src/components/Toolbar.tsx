@@ -4,9 +4,11 @@ import { asciiToText, asciiToHtml, asciiToJs } from '../asciiEngine'
 interface ToolbarProps {
   grid: AsciiChar[][]
   settings: AsciiSettings
+  controlsOpen: boolean
+  onToggleControls: () => void
 }
 
-export function Toolbar({ grid, settings }: ToolbarProps) {
+export function Toolbar({ grid, settings, controlsOpen, onToggleControls }: ToolbarProps) {
   const hasContent = grid.length > 0
 
   const copyText = () => {
@@ -27,37 +29,53 @@ export function Toolbar({ grid, settings }: ToolbarProps) {
   }
 
   return (
-    <div className="h-12 bg-[#111118] border-b border-[#2a2a3a] flex items-center px-4 gap-4">
-      <div className="flex items-center gap-2">
+    <div className="h-12 shrink-0 bg-[#111118] border-b border-[#2a2a3a] flex items-center px-3 sm:px-4 gap-2 sm:gap-4">
+      <div className="flex items-center gap-2 min-w-0">
         <span className="text-lg">⌨</span>
-        <h1 className="text-sm font-bold text-white tracking-wider">
+        <h1 className="text-sm font-bold text-white tracking-wider whitespace-nowrap">
           ASC<span className="text-indigo-400">11</span>
-          <span className="text-xs text-gray-600 ml-2 font-normal">ASCII Art Editor</span>
+          <span className="text-xs text-gray-600 ml-2 font-normal hidden sm:inline">ASCII Art Editor</span>
         </h1>
       </div>
 
       <div className="flex-1" />
 
+      {/* Export buttons - icons only on mobile */}
       <button
         onClick={copyText}
         disabled={!hasContent}
-        className="px-3 py-1 rounded text-xs font-medium bg-[#1a1a2e] text-gray-300 hover:bg-[#222238] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        className="px-2 sm:px-3 py-1.5 rounded text-xs font-medium bg-[#1a1a2e] text-gray-300 hover:bg-[#222238] active:bg-[#2a2a4a] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        title="Copy ASCII"
       >
-        📋 Copy ASCII
+        <span className="sm:hidden">📋</span>
+        <span className="hidden sm:inline">📋 Copy</span>
       </button>
       <button
         onClick={exportHtml}
         disabled={!hasContent}
-        className="px-3 py-1 rounded text-xs font-medium bg-[#1a1a2e] text-gray-300 hover:bg-[#222238] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        className="px-2 sm:px-3 py-1.5 rounded text-xs font-medium bg-[#1a1a2e] text-gray-300 hover:bg-[#222238] active:bg-[#2a2a4a] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        title="Export HTML"
       >
-        🌐 Export HTML
+        <span className="sm:hidden">🌐</span>
+        <span className="hidden sm:inline">🌐 HTML</span>
       </button>
       <button
         onClick={exportJs}
         disabled={!hasContent}
-        className="px-3 py-1 rounded text-xs font-medium bg-[#1a1a2e] text-gray-300 hover:bg-[#222238] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        className="px-2 sm:px-3 py-1.5 rounded text-xs font-medium bg-[#1a1a2e] text-gray-300 hover:bg-[#222238] active:bg-[#2a2a4a] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        title="Export JS"
       >
-        ⚡ Export JS
+        <span className="sm:hidden">⚡</span>
+        <span className="hidden sm:inline">⚡ JS</span>
+      </button>
+
+      {/* Mobile controls toggle */}
+      <button
+        onClick={onToggleControls}
+        className="md:hidden px-2 py-1.5 rounded text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 transition-colors"
+        title="Toggle Controls"
+      >
+        {controlsOpen ? '✕' : '⚙'}
       </button>
     </div>
   )

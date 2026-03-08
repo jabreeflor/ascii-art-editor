@@ -26,20 +26,21 @@ export function AsciiPreview({ grid, settings }: AsciiPreviewProps) {
 
   if (!grid.length) {
     return (
-      <div className="flex-1 flex items-center justify-center text-gray-600">
+      <div className="flex-1 flex items-center justify-center text-gray-600 p-4">
         <div className="text-center">
-          <div className="text-6xl mb-4 opacity-30">⌨</div>
-          <p className="text-lg">Upload an image, video, or start your webcam</p>
-          <p className="text-sm mt-2 opacity-60">ASCII art will appear here</p>
+          <div className="text-5xl sm:text-6xl mb-4 opacity-30">⌨</div>
+          <p className="text-base sm:text-lg">Upload an image, video, or start your webcam</p>
+          <p className="text-xs sm:text-sm mt-2 opacity-60">ASCII art will appear here</p>
+          <p className="text-xs mt-3 opacity-40 md:hidden">Tap ⚙ to open controls</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex-1 overflow-auto bg-[#0a0a0a] p-4 flex items-start justify-center">
+    <div className="flex-1 overflow-auto bg-[#0a0a0a] p-2 sm:p-4 flex items-start justify-center touch-pan-x touch-pan-y">
       <pre
-        className="ascii-output select-all"
+        className="ascii-output select-all max-w-full"
         style={{
           fontSize: `${settings.fontSize}px`,
           lineHeight: settings.lineHeight,

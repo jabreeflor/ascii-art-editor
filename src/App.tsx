@@ -10,6 +10,7 @@ export default function App() {
   const [source, setSource] = useState<SourceType>('image')
   const [grid, setGrid] = useState<AsciiChar[][]>([])
   const [webcamActive, setWebcamActive] = useState(false)
+  const [controlsOpen, setControlsOpen] = useState(false)
 
   const imageRef = useRef<HTMLImageElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -131,18 +132,37 @@ export default function App() {
 
   return (
     <div className="h-full flex flex-col">
-      <Toolbar grid={grid} settings={settings} />
-      <div className="flex-1 flex overflow-hidden">
-        <Controls
-          settings={settings}
-          onChange={setSettings}
-          source={source}
-          onSourceChange={handleSourceChange}
-          onImageUpload={handleImageUpload}
-          onVideoUpload={handleVideoUpload}
-          onWebcamToggle={toggleWebcam}
-          webcamActive={webcamActive}
-        />
+      <Toolbar grid={grid} settings={settings} controlsOpen={controlsOpen} onToggleControls={() => setControlsOpen(!controlsOpen)} />
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        {/* Mobile overlay backdrop */}
+        {controlsOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-30 md:hidden"
+            onClick={() => setControlsOpen(false)}
+          />
+        )}
+        {/* Controls sidebar / mobile drawer */}
+        <div
+          className={`
+            fixed inset-x-0 bottom-0 z-40 max-h-[75dvh] overflow-y-auto
+            transform transition-transform duration-300 ease-in-out
+            md:static md:transform-none md:max-h-none md:z-auto
+            ${controlsOpen ? 'translate-y-0' : 'translate-y-full'}
+            md:translate-y-0
+          `}
+        >
+          <Controls
+            settings={settings}
+            onChange={setSettings}
+            source={source}
+            onSourceChange={handleSourceChange}
+            onImageUpload={handleImageUpload}
+            onVideoUpload={handleVideoUpload}
+            onWebcamToggle={toggleWebcam}
+            webcamActive={webcamActive}
+            onClose={() => setControlsOpen(false)}
+          />
+        </div>
         <AsciiPreview grid={grid} settings={settings} />
       </div>
     </div>

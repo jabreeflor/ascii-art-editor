@@ -10,15 +10,18 @@ body {
   background: #0a0a0a;
   color: #e0e0e0;
   overflow: hidden;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #root {
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
+  overflow: hidden;
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #1a1a2e; }
 ::-webkit-scrollbar-thumb { background: #4a4a6a; border-radius: 3px; }
 
@@ -27,4 +30,34 @@ body {
   letter-spacing: 0px;
   white-space: pre;
   font-variant-ligatures: none;
+}
+
+/* Mobile: larger touch targets for range inputs */
+@media (max-width: 768px) {
+  input[type="range"] {
+    height: 8px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Mobile: prevent text selection flashing on rapid taps */
+@media (pointer: coarse) {
+  button, label {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* Safe area padding for notched devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .rounded-t-2xl {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
